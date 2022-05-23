@@ -1,12 +1,22 @@
 const SteamTotp = require('steam-totp');
 const SteamCommunity = require('steamcommunity');
+const fs = require('fs');
 const community = new SteamCommunity();
+
+const TIME = 1000 * 60; //sets time (1000 is one second) 
+const files = fs.readdirSync('./avatars'); //gets table with all files
+const format = 'jpg'; //sets files format (all files have to be the same format)
+
+//login details
+const name = process.env['login']; 
+const password = process.env['password']; 
+const secret = process.env['shared_secret'];
 
  
 const details = {
-  accountName: process.env['login'] ,
-  password: process.env['password'],
-  twoFactorCode: SteamTotp.generateAuthCode(process.env['shared_secret'])
+  accountName: name,
+  password: password,
+  twoFactorCode: SteamTotp.generateAuthCode(secret)
 };
 
  
@@ -15,38 +25,30 @@ community.login(details,(err) =>{
   if(err){
     console.log(err);
   } else {
-    console.log('Logged into Steam via steam-community');
+    console.log(`Logged into Steam via steam-community to ${details.accountName} account`);
+    console.log(`Loaded ${files.length} avatars`);
     avatar_change();
   }
 });
 
 
-
 function avatar_change(){
-  var avatar = 1;
-  setInterval(async () =>{
+  let counter = 0;
+  setInterval(() =>{
     
-    community.uploadAvatar(`./avatars/${avatar}.jpg`,'jpg',(err) =>{
+    community.uploadAvatar(`./avatars/${files[counter]}`, format, (err) =>{
       if(err){
         console.log(err);
       }else{
-        console.log(`Changed avatar to: ${avatar-1}.jpg`)
+        console.log(`Changed avatar to: ${files[counter]}`);
+        
+        counter += 1;
+        if(counter == files.length){
+          counter = 0;
+        }
+        
       }
     });
-    
-    avatar += 1;
-    if(avatar > 3){
-      avatar = 1;
-    }
 
-  }, 60000);
+  }, TIME);
 }
-
-
-
-
-const http = require('http');
-http.createServer((req, res) => {
-  res.write("OK");
-  res.end();
-}).listen(3000);
