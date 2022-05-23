@@ -1,0 +1,17 @@
+{
+  "name": "steamavatar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "steam-totp": "^2.1.2",
+    "steam-user": "^4.24.3",
+    "steamcommunity": "^3.44.1"
+  }
+}
