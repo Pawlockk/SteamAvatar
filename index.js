@@ -30,7 +30,7 @@ function avatar_change(){
       if(err){
         console.log(err);
       }else{
-        console.log(`Changed avatar to: ${avatar}.jpg`)
+        console.log(`Changed avatar to: ${avatar-1}.jpg`)
       }
     });
     
